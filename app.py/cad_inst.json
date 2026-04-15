@@ -1,0 +1,82 @@
+[
+    {
+        "id": 1,
+        "razao_social": "Aparecido Martins de Souza",
+        "nome_fantasia": "Auto Eletrica Terra Roxa",
+        "cnpj": 19804918000111,
+        "endereco": "Av Castelo Branco, 1949",
+        "contato": "(44) 99848-0624",
+        "email": "cidoautoeletricaterraroxapr@hotmail.com"
+    },
+    {
+        "id": 2,
+        "razao_social": "Aparecido Martins de Souza",
+        "nome_fantasia": "Auto Eletrica Terra Roxa",
+        "cnpj": 19804918000111,
+        "endereco": "Av Castelo Branco, 1949",
+        "contato": "(44) 99848-0624",
+        "email": "cidoautoeletricaterraroxapr@hotmail.com"
+    },
+    {
+        "id": 3,
+        "razao_social": "Adrian Ricardo de Souza",
+        "nome_fantasia": "Example a",
+        "cnpj": 11111111111111,
+        "endereco": "Rua Luiz Sergio Fedrigo, 71",
+        "contato": "(44) 99943-0542",
+        "email": "brackmansouza@gmail.com"
+    },
+    {
+        "id": 4,
+        "razao_social": "Matheus Athayde",
+        "nome_fantasia": "matheus",
+        "cnpj": "00.000.000/000-00",
+        "endereco": "Rua Luiz Sergio Fedrigo, 72",
+        "contato": "(44) 99943-0541",
+        "email": "matheys.pucpr.edu.br"
+    },
+    {
+        "id": 5,
+        "razao_social": "Matheus ",
+        "nome_fantasia": "matheus",
+        "cnpj": "00.000.000/000-99",
+        "endereco": "Rua Luiz Sergio Fedrigo, 772",
+        "contato": "(44) 99943-0541",
+        "email": "matheys@pucpr.edu.br"
+    },
+    {
+        "id": 6,
+        "razao_social": "Matheus ",
+        "nome_fantasia": "matheus",
+        "cnpj": "00.000.000/000-99",
+        "endereco": "Rua Luiz Sergio Fedrigo, 772",
+        "contato": "(44) 99943-0541"
+    },
+    {
+        "id": 7,
+        "razao_social": "Matheus ",
+        "nome_fantasia": "matheus",
+        "cnpj": "00.000.000/000-00",
+        "endereco": "Rua Luiz Sergio Fedrigo, 72",
+        "contato": "(44) 99943-0541",
+        "email": "brackman@gmail.com"
+    },
+    {
+        "id": 8,
+        "razao_social": "Diego Krause",
+        "nome_fantasia": "Example b",
+        "cnpj": 11111111111211,
+        "endereco": "Rua Luiz Sergio Fedrigo, 71",
+        "contato": "(44) 99943-0542",
+        "email": "brackmansouza@gmail.com"
+    },
+    {
+        "id": 9,
+        "razao_social": "Adriana souza",
+        "nome_fantasia": "Example c",
+        "cnpj": 11111111111211,
+        "endereco": "Rua Luiz Sergio Fedrigo, 98",
+        "contato": "(44) 99823-7324",
+        "email": "brackmansouza100@gmail.com"
+    }
+]

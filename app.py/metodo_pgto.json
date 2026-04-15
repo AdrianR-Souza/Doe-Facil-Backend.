@@ -1,0 +1,21 @@
+[
+    {
+        "id": 1,
+        "nome": "PIX",
+        "prazo_pgto": "Á vista"
+    },
+    {
+        "id": 2,
+        "nome": "CARTÃO CRÉDITO",
+        "prazo_pgto": 30,
+        "num_cartao": "1111 1111 1111 1111",
+        "cvc_cartao": "111",
+        "vencimento_cartao": "11/11"
+    },
+    {
+        "id": 3,
+        "nome": "BOLETO BANCÁRIO",
+        "prazo_pgto": 7
+        
+    }
+]
