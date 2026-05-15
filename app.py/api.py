@@ -445,23 +445,23 @@ def add_pedido():
     if novo.get("id_metodo_pgto") not in ids_metodos:
         return jsonify({"error": "id_metodo_pgto não cadastrado."}), 404
     
-            
     ultimo_id = pedido[-1]["id"] if pedido else 0
     novo["id"] = ultimo_id + 1
     pedido.append(novo)
     save_function("cad_pedido.json", pedido)
     return jsonify(novo), 201
 
-    @app.put('/pedido/<int:id>')
-    def atualizar_pedido(id):
-        pedidos = load_function("cad_pedidos.json")
-        dados = reques.get_json
-        
-        for pedido in pedidos:
-            if id == pedido["id"]:
-                pedidos.update(dados)
-                save_function("cad_pedido.json", pedidos)
-                return jsnonify({"mensagem": "O pedido foi atualizado com sucesso!"}), 200
+@app.put('/pedido/<int:id>')
+def atualizar_pedido(id):
+    pedidos = load_function("cad_pedido.json")
+    dados = request.get_json()
+    
+    for pedido in pedidos:
+        if id == pedido["id"]:
+            pedido.update(dados)
+            pedido["id"] = id
+            save_function("cad_pedido.json", pedidos)
+            return jsonify({"mensagem": f"O pedido {id} foi atualizado com sucesso!"}), 200
             
     return jsonify({"error": "Pedido não encontrado."}), 404
     
@@ -469,32 +469,35 @@ def add_pedido():
 
 @app.get('/metodo_pgto')
 def metodo_pgto():
-   with open("metodo_pgto.json", "r", encoding="utf-8") as arquivo:
-        metodo_pgto = load_function("metoto_pgto.json")
-         
-   return jsonify(metodo_pgto)
-  
-@app.post("/metoto_pgto")
+    metodos = load_function("metodo_pgto.json")
+    return jsonify(metodos)
+
+@app.post("/metodo_pgto")
 def confirmar_pgto():
     confirmar_pgto = load_function("metodo_pgto.json")
     novos_dados = request.get_json()
     
-    metodos_pgto_validos = ["pix", "cartão de credito", "boleto"]
-    if novos_dados == metodos_pgto_validos:
-        confirmar_pgto.append(novos_dados)
-        save_function("metodo_pgto.json")
-        return jsonify({"mensagem": "O pagamento foi confirmado."}), 201
+    id_metodos_pgto = [1,2,3]
     
-    return jsonify({"error": "Método de pagamento não encontrado."}), 404
-  
+    metodos_pgto_validos = [
+        (1,"pix"),
+        (2 ,"cartão de credito"),
+        (3, "boleto")
+    ]
+    id_escolhido = novos_dados.get("id_metodo_pgto")
+
+    if id_escolhido not in id_metodos_pgto:
+        return jsonify({"error": "Metodo de pagamento nao encontrado."}), 404
+    elif id_escolhido == 1:
+        return jsonify({"mensagem": f"Pagamento via {metodos_pgto_validos[0][1]} confirmado!"}), 200
+    elif id_escolhido == 2:
+        return jsonify({"mensagem": f"Pagamento via {metodos_pgto_validos[1][1]} confirmado!"}), 200
+    elif id_escolhido == 3:
+        return jsonify({"mensagem": f"Pagamento via {metodos_pgto_validos[2][1]} confirmado!"}), 200
+        
   
 app.run()
 
-
-
-
-#metodo de pago, pix, deb, cred, boleto
-#get para retornar as met de pag
-
+#source "/Users/adrian/Library/CloudStorage/OneDrive-GrupoMarista/Faculdade/PUC 2026/RACIOCINIO LÓGICO/Doe + Fácil/venv/bin/activate"
 #para entrar na pasta do arquivo: cd "c:\Users\brack\OneDrive - Grupo Marista\Faculdade\PUC 2026\RACIOCINIO LÓGICO\Doe + Fácil\app.py"    
 #para rodar o codigo após entrar na pasta: python api.py  

@@ -10,11 +10,11 @@
     },
     {
         "id": 2,
-        "nome": "Leite 1l",
+        "nome": "Chocolate Quente 1l",
         "tipoVolume": "L",
-        "valor": "5,99",
+        "valor": "14,99",
         "tipo": "perecivel",
-        "peso": "1"
+        "peso": "2"
     },
     {
         "id": 3,
