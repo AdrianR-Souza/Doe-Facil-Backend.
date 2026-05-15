@@ -1,21 +1,29 @@
+#pasta certa: cd "c:\Users\brack\OneDrive - Grupo Marista\Faculdade\PUC 2026\RACIOCINIO LÓGICO\Doe + Fácil\app.py"                                                                                                                        
+#depois: python api.py
+
 import json
 from flask import Flask, request, jsonify
 
+
 app = Flask(__name__)
 
-def load_function ():
-    with open("produtos.json", "r", encoding="utf-8") as arquivo:
+#função para carregar 
+def load_function (path_file):
+    with open(path_file, "r", encoding="utf-8") as arquivo:
         return json.load(arquivo)
     
     
-def save_function(save):
-    with open ('produtos.json','w', encoding="utf-8") as f:
+def save_function(path_file, save):
+    with open (path_file,'w', encoding="utf-8") as f:
         json.dump(save, f, indent=4)
 
-#localhost/rota/id
-@app.get('/produtos/<int:id>')
-def get_id(id):
-    save = load_function()
+        
+#                     produtos
+
+#procurar produtos por id
+@app.get('/produto/<int:id>')
+def pedar_id_produto(id):
+    save = load_function("produtos.json")
     
     for i in save:
         if i.get('id') == id:
@@ -23,39 +31,33 @@ def get_id(id):
         
     return jsonify({"error" : "Id não encontrado na rota determinada."}), 404 
 
-    
-    
-
-#para add os jsons dinamicamente
-def ler_json(nome_arquivo):
-    try:
-        with open(nome_arquivo, "r", encoding="utf-8") as arquivo:
-            return json.load(arquivo)
-    except FileNotFoundError:
-        return []
-
-def salvar_json(nome_arquivo, dados):
-    with open(nome_arquivo, "w", encoding="utf-8") as arquivo:
-        json.dump(dados, arquivo, ensure_ascii=False, indent=4)
-        
-###############################################################################
-#                     produtos
-
-#rota cadastro de produtos
-@app.route('/produto', methods=["GET"])
+@app.get('/produto')
 def listar_produtos():
-   with open("produtos.json", "r", encoding="utf-8") as arquivo:
+    with open("produtos.json", "r", encoding="utf-8") as arquivo:
         produtos = json.load(arquivo)
-   return jsonify(produtos), 200
+        
+    nome = request.args.get('nome')
+    tipo = request.args.get('tipo')
+        
+    resultado = []
+
+    for produto in produtos:
+        if nome and nome in produto.get('nome', ''):
+            resultado.append(produto)
+        elif tipo and tipo in produto.get('tipo', ''):
+            resultado.append(produto)
+
+    if nome or tipo:
+        produtos = resultado
+    return jsonify(produtos), 200
  
- # metodo POST que recebe o JSON do front-end e add dinamicamente
-@app.route('/produto', methods=["POST"])
+ # metodo POST 
+@app.post('/produto')
 def add_produto():
-    produtos = ler_json("produtos.json")
+    produtos = load_function("produtos.json")
         
     novo = request.get_json()
     
-
     if not novo.get('nome'):
         return jsonify({"erro": "Campo 'nome' é obrigatório"}), 400
     if not isinstance(novo.get('nome'), str):
@@ -79,52 +81,89 @@ def add_produto():
     if not isinstance(novo.get('preco'), float) or novo.get('preco') == 0:
         return jsonify({"error": "O retorno (preço) não é o tipo de dados necessário."}), 422
     
-    
     ultimo_id = produtos[-1]["id"] if produtos else 0
     novo["id"] = ultimo_id + 1
-    
     produtos.append(novo)
-    salvar_json("produtos.json", produtos)
+    save_function("produtos.json", produtos)
     
     return jsonify(novo), 201
  
- 
- #metodo PUT- ainda não está funcinando
-@app.route('/produto/<int:id>', methods=["PUT"])
+ #metodo PUT
+@app.put('/produto/<int:id>')
 def atualizar_produto(id):
-      produtos = ler_json("produtos.json")
+      produtos = load_function("produtos.json")
+      dados = request.get_json()
       
       for produto in produtos:
-             if produto["id"] == id:
-                  dados_novos = request.get_json()
-                  produto.update(dados_novos)
-                  produto["id"] = id
-                  
-                  if dados_novos is None:
-                         return jsonify ({"error" : "JSON inválido ou ausente."})
-                  
-                  salvar_json("produtos.json", produtos)
-                  return jsonify(produto), 200
-            
+            if produto.get("id") == id:
+                produto.update(dados)
+                produto["id"] = id
+                save_function("produtos.json", produtos)
+                return jsonify({"mensagem" : "O atualizar produtos foi feito com sucesso."}), 200
+           
+        
       return jsonify({"erro" : "Produto não encontrado."}), 404
-
-
-      
-###############################################################################
+                
+#metodo delete
+@app.delete('/produto/<int:id>')
+def deletar(id):
+    produtos = load_function("produtos.json")
+    validar_produto = load_function("cad_pedido.json")
+    
+    for produto in validar_produto:
+        if id == produto["id_produto"]:
+            return jsonify({"error": "O produto selecionado não pode ser deletado."}), 422
+    
+    for produto in produtos:
+        if id == produto["id"]:
+            produtos.remove(produto)
+            save_function("produtos.json", produtos)
+            return jsonify({"mensagem" : "Produto deletado com sucesso!"}), 204
+           
+    return jsonify({"error": "produto não encontrado."}), 404
+        
+        
 #                     instituições
-
 #rota cadastro de instituições que irão receber as doações diretamente
-@app.route('/instituicoes', methods=["GET"])
+
+@app.get('/instituicoes/<int:id>')
+def pegar_id_instituicoes(id):
+    save = load_function("cad_inst.json")
+    
+    for i in save:
+        if i.get('id') == id:
+            return jsonify(i), 200
+        
+    return jsonify({"error" : "Id não encontrado na rota determinada."}), 404 
+
+@app.get('/instituicoes')
 def cad_instituicao():
-   with open("cad_inst.json", "r", encoding="utf-8") as arquivo:
+    with open("cad_inst.json", "r", encoding="utf-8") as arquivo:
          cadastro_inst = json.load(arquivo)
-   return jsonify(cadastro_inst),200
+         
+    razao_social = request.args.get('razao_social')
+    nome_fantasia = request.args.get('nome_fantasia')
+    cnpj = request.args.get('cnpj')
+        
+    resultado = []
+
+    for instituicao in cadastro_inst:
+        if razao_social and razao_social in instituicao.get('razao_social', ''):
+            resultado.append(instituicao)
+        elif nome_fantasia and nome_fantasia in instituicao.get('nome_fantasia', ''):
+            resultado.append(instituicao)
+        elif cnpj and cnpj in str(instituicao.get('cnpj', '')):
+            resultado.append(instituicao)
+
+    if razao_social or nome_fantasia or cnpj:
+        return jsonify(resultado),200
+    
+    return jsonify(cadastro_inst),200
 
 #post instituições
-@app.route('/instituicoes', methods=["POST"])
+@app.post('/instituicoes')
 def add_instituicoes():
-    instituicoes = ler_json("cad_inst.json")
-    
+    instituicoes = load_function("cad_inst.json")
     novo = request.get_json()  
     
     if not novo.get('razao_social'):
@@ -156,34 +195,85 @@ def add_instituicoes():
         return jsonify({"error": "No cadastro, falta o Email da instituição:"}), 400
     if not isinstance(novo.get('email'), str):
         return jsonify({"error": "O retorno (email) não é o tipo de dados necessário."}), 422
-    #if not novo.get('email') == '@':
-    
-    
-    
-    # pega o último ID e incrementa
+    dominios_validos = ['@yahoo.com', '@gmail.com', '@hotmail.com', '@icloud.com']
+    dominio_user = "@" + novo.get('email').split("@")[1]
+    if dominio_user not in dominios_validos:
+        return jsonify({"error": "O retorno (email) não tem dominio válido."}), 422
+            
     ultimo_id = instituicoes[-1]["id"] if instituicoes else 0
     novo["id"] = ultimo_id + 1
-    
     instituicoes.append(novo)
-    salvar_json("cad_inst.json", instituicoes )
+    save_function("cad_inst.json", instituicoes )
     
     return jsonify(novo), 201
 
-###############################################################################
-#                            DOADOR
-#rota GET cadastro de doadores
-@app.route('/doador', methods=["GET"])
+@app.put('/instituicoes/<int:id>')
+def atualizar_dados(id):
+    instituicoes = load_function("cad_inst.json")
+    dados = request.get_json()
+    
+    for inst in instituicoes:
+        if inst.get("id") == id:
+            inst.update(dados)
+            inst["id"] = id
+            save_function("cad_inst.json", instituicoes)
+            return jsonify({"mensagem": "O atualizar instituições foi feito com sucesso."}), 200
+        
+    return jsonify({"error": "Instituição não encontrado."}), 404
+
+@app.delete('/instituicoes/<int:id>')
+def delete_instituicoes(id):
+    instituicoes = load_function("cad_inst.json")
+    pedidos = load_function("cad_pedido.json")
+    
+    for valid_id in pedidos:
+        if id == valid_id["id_instituicao"]:
+            return jsonify({"error": "A instituição desejada não pode ser deletada por estar vinculada a um pedido."}), 422
+    
+    for inst in instituicoes:
+        if id == inst["id"]:
+            instituicoes.remove(inst)
+            save_function("cad_inst.json", instituicoes) 
+            return jsonify({"mensagem": "Instituição deletada."}), 204
+       
+    return jsonify({"error": "Instituição não encontrada."}), 404   
+
+#DOADOR
+
+@app.get('/doador/<int:id>')
+def pegar_id_doador(id):
+    save = load_function("cad_doador.json")
+    
+    for i in save:
+        if i.get('id') == id:
+            return jsonify(i), 200
+        
+    return jsonify({"error" : "Id não encontrado na rota determinada."}), 404 
+
+@app.get('/doador')
 def cad_doador():
-   with open("cad_doador.json", "r", encoding="utf-8") as arquivo:
+    with open("cad_doador.json", "r", encoding="utf-8") as arquivo:
          cadastro_doador = json.load(arquivo)
       
-   return jsonify(cadastro_doador)
+    nome = request.args.get('nome')
+    tipo_doador = request.args.get('tipo_doador')
+    
+    resultado = []
+
+    for doador in cadastro_doador:
+        if nome and nome in doador.get('nome', ''):
+            resultado.append(doador)
+        elif tipo_doador and tipo_doador in doador.get('tipo_doador', ''):
+            resultado.append(doador)
+    
+    if nome or tipo_doador:
+        return jsonify(resultado), 200
+    return jsonify(cadastro_doador), 200
 
 #post do doador
-@app.route('/doador', methods=["POST"])
+@app.post('/doador')
 def add_doador():
-    doador = ler_json("cad_doador.json")
-    
+    doador = load_function("cad_doador.json")
     novo = request.get_json()
     
     if not novo.get('nome'):
@@ -217,34 +307,92 @@ def add_doador():
     if not isinstance(novo.get('cep'), str):
         return jsonify({"error" : "O retorno (cep) não é do tipo dados necessário."}), 422
     
-    
+    if not novo.get('email'):
+        return jsonify({"error": "No cadastro, falta o Email da instituição:"}), 400
+    if not isinstance(novo.get('email'), str):
+        return jsonify({"error": "O retorno (email) não é o tipo de dados necessário."}), 422
+    dominios_validos = ['@yahoo.com', '@gmail.com', '@hotmail.com', '@icloud.com']
+    dominio_user ="@" + novo.get('email').split("@")[1]
+    if dominio_user not in dominios_validos:
+        return jsonify({"error": "O retorno (email) não tem dominio válido."}), 422
+         
     ultimo_id = doador[-1]["id"] if doador else 0
-    
     novo["id"] = ultimo_id + 1
-    
     doador.append(novo)
-    salvar_json("cad_doador.json", doador)
+    save_function("cad_doador.json", doador)
     
     return jsonify(novo), 201
 
+@app.put('/doador/<int:id>')
+def atualizar_doador(id):
+    doadores = load_function("cad_doador.json")
+    novo = request.get_json()
+    
+    for doador in doadores:
+        if doador["id"] == id:
+            doador.update(novo)
+            doador["id"] == id
+            save_function("cad_doador.json", doadores)
+            return jsonify({"mensagem": "/doador atualizado com sucesso."}), 200
+        
+    return jsonify({"error": "Doador não encontrado."}), 404
+        
+@app.delete('/doador/<int:id>')
+def delete_doador(id):
+    doadores = load_function("cad_doador.json")
+    lista_validar = load_function("cad_pedido.json")
+    
+    for pedido in lista_validar:
+        if id == pedido["id_doador"]:
+            return jsonify({"error": "O doador não pode não ser deletado."}), 422
+        
+        for doador in doadores:
+            if id == doador["id"]:
+                doadores.remove(doador)
+                save_function("cad_doador.json", doadores)
+                return jsonify({"mensagem": "Doador deletado com sucesso!"}), 204
+            
+        return jsonify({"error": "Doador não encontrado."}), 404
+        
 
-##############################################################################
 #Rota /pedido
+@app.get('/pedido/<int:id>')
+def pegar_id_pedido(id):
+    save = load_function("cad_pedido.json")
+    
+    for i in save:
+        if i.get('id') == id:
+            return jsonify(i), 200
+        
+    return jsonify({"error" : "Id não encontrado na rota determinada."}), 404 
 
-@app.route('/pedido', methods=["GET"])
+
+@app.get('/pedido')
 def cad_pedido():
     with open("cad_pedido.json", "r", encoding="utf-8") as arquivo:
         cadastro_pedido = json.load(arquivo)
+
+    id_doador = request.args.get('id_doador')
+    id_instituicao = request.args.get('id_instituicao')
         
+    resultado = []
+
+    for pedidos in cadastro_pedido:
+        if id_doador and int(id_doador) == pedidos.get('id_doador', ''):
+            resultado.append(pedidos)
+        elif id_instituicao and int(id_instituicao) == pedidos.get('id_instituicao', ''):
+            resultado.append(pedidos)
+
+    if id_doador or id_instituicao:
+        return jsonify(resultado), 200
+    
     return jsonify(cadastro_pedido),200
 
-@app.route('/pedido', methods=["POST"])
+@app.post('/pedido')
 def add_pedido():
     
-    pedido = ler_json("cad_pedido.json")
+    pedido = load_function("cad_pedido.json")
     novo = request.get_json()
-    #ver c o diego sobre esse post
-    
    
     if not novo.get('id_doador'):
         return jsonify({"error": "No pedido, falta o id_doador:"}), 400
@@ -267,10 +415,10 @@ def add_pedido():
         return jsonify({"error" : "O retorno (id_metodo_pgto) não é do tipo dados necessário."}), 422
     
 #validação apra ver se os ids para o pedido já foram cadastrados anteriormente
-    doadores = ler_json("cad_doador.json")
-    instituicoes = ler_json("cad_inst.json")
-    produtos = ler_json("produtos.json")
-    metodos = ler_json("metodo_pgto.json")
+    doadores = load_function("cad_doador.json")
+    instituicoes = load_function("cad_inst.json")
+    produtos = load_function("produtos.json")
+    metodos = load_function("metodo_pgto.json")
 
     ids_doadores = []
     for i in doadores:
@@ -289,37 +437,56 @@ def add_pedido():
         ids_metodos.append(i["id"])
 
     if novo.get("id_doador") not in ids_doadores:
-        return jsonify({"error": "id_doador não cadastrado."}), 422
+        return jsonify({"error": "id_doador não cadastrado."}), 404
     if novo.get("id_instituicao") not in ids_instituicoes:
-        return jsonify({"error": "id_instituicao não cadastrado."}), 422
+        return jsonify({"error": "id_instituicao não cadastrado."}), 404
     if novo.get("id_produto") not in ids_produtos:
-        return jsonify({"error": "id_produto não cadastrado."}), 422
+        return jsonify({"error": "id_produto não cadastrado."}), 404
     if novo.get("id_metodo_pgto") not in ids_metodos:
-        return jsonify({"error": "id_metodo_pgto não cadastrado."}), 422
-            
-            
+        return jsonify({"error": "id_metodo_pgto não cadastrado."}), 404
     
-
-    
+            
     ultimo_id = pedido[-1]["id"] if pedido else 0
-    
     novo["id"] = ultimo_id + 1
-    
     pedido.append(novo)
-    salvar_json("cad_pedido.json", pedido)
-    
+    save_function("cad_pedido.json", pedido)
     return jsonify(novo), 201
 
-###############################################################################
+    @app.put('/pedido/<int:id>')
+    def atualizar_pedido(id):
+        pedidos = load_function("cad_pedidos.json")
+        dados = reques.get_json
+        
+        for pedido in pedidos:
+            if id == pedido["id"]:
+                pedidos.update(dados)
+                save_function("cad_pedido.json", pedidos)
+                return jsnonify({"mensagem": "O pedido foi atualizado com sucesso!"}), 200
+            
+    return jsonify({"error": "Pedido não encontrado."}), 404
+    
 #                         metodo pag
 
-
-@app.route('/metodo_pgto', methods=["GET"])
+@app.get('/metodo_pgto')
 def metodo_pgto():
    with open("metodo_pgto.json", "r", encoding="utf-8") as arquivo:
-         metodo_pgto = json.load(arquivo)
+        metodo_pgto = load_function("metoto_pgto.json")
          
    return jsonify(metodo_pgto)
+  
+@app.post("/metoto_pgto")
+def confirmar_pgto():
+    confirmar_pgto = load_function("metodo_pgto.json")
+    novos_dados = request.get_json()
+    
+    metodos_pgto_validos = ["pix", "cartão de credito", "boleto"]
+    if novos_dados == metodos_pgto_validos:
+        confirmar_pgto.append(novos_dados)
+        save_function("metodo_pgto.json")
+        return jsonify({"mensagem": "O pagamento foi confirmado."}), 201
+    
+    return jsonify({"error": "Método de pagamento não encontrado."}), 404
+  
   
 app.run()
 
@@ -327,4 +494,7 @@ app.run()
 
 
 #metodo de pago, pix, deb, cred, boleto
-#get para retornar as met de pago, depois um POST para confirmar o pag
+#get para retornar as met de pag
+
+#para entrar na pasta do arquivo: cd "c:\Users\brack\OneDrive - Grupo Marista\Faculdade\PUC 2026\RACIOCINIO LÓGICO\Doe + Fácil\app.py"    
+#para rodar o codigo após entrar na pasta: python api.py  

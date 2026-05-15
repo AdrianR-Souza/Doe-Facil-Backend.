@@ -1,12 +1,13 @@
 [
     {
         "id": 1,
-        "nome": "Adrian Souza",
+        "nome": "Duda",
         "tipo_doador": "cpf",
         "endereco": "Rua Luiz Sergio Fedrigo, 71",
         "cidade": "Terra Roxa",
         "cep": "85.990-000",
-        "telefone": "(44) 99943-0542"
+        "telefone": "(44) 99943-0542",
+        "email": "duda@icloud.com"
     },
     {
         "id": 2,
@@ -16,5 +17,15 @@
         "cidade": "Toledo",
         "cep": "85.990-000",
         "telefone": "(45) 99943-0542"
+    },
+    {
+        "id": 3,
+        "nome": "Adrian Mati",
+        "tipo_doador": "cpf",
+        "endereco": "Rua Luiz Sergio Fedrigo, 71",
+        "cidade": "Terra Roxa",
+        "cep": "85.990-000",
+        "telefone": "(44) 99943-0542",
+        "email": "duda@icloud.com"
     }
 ]

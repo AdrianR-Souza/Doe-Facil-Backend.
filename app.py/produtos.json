@@ -4,7 +4,7 @@
         "nome": "Bolacha Negresco",
         "tipoVolume": "Kg",
         "valor": "10.99",
-        "tipo": "mão perecível",
+        "tipo": "perecivel",
         "peso": "5",
         "preco": 1.99
     },
@@ -13,7 +13,7 @@
         "nome": "Leite 1l",
         "tipoVolume": "L",
         "valor": "5,99",
-        "tipo": "não perecível",
+        "tipo": "perecivel",
         "peso": "1"
     },
     {
@@ -21,71 +21,22 @@
         "nome": "Leite 1l",
         "tipoVolume": "L",
         "valor": "5,99",
-        "tipo": "não perecível",
+        "tipo": "perecivel",
         "peso": "1"
     },
     {
         "id": 4,
-        "nome": "Café ",
+        "nome": "Caf\u00e9 ",
         "tipoVolume": "L",
         "valor": "5,99",
-        "tipo": "não perecível",
+        "tipo": "perecivel",
         "peso": "1"
     },
     {
         "id": 5,
         "nome": "Bolacha oreo",
         "tipoVolume": "pcto",
-        "tipo": "não perecível",
+        "tipo": "perecivel",
         "preco": 1.99
-    },
-    {
-        "id": 6,
-        "nome": "Bolacha ",
-        "tipoVolume": "pcto",
-        "tipo": "não perecível",
-        "preco": 1.98
-    },
-    {
-        "id": 7,
-        "nome": "Feijão ",
-        "tipoVolume": "pcto 1Kg",
-        "tipo": "não perecível",
-        "preco": 9.98
-    },
-    {
-        "id": 8,
-        "nome": "Cereal 1Kg ",
-        "tipoVolume": "kg",
-        "tipo": "não perecivel",
-        "preco": 12.99
-    },
-    {
-        "id": 9,
-        "nome": "Cereal 1Kg ",
-        "tipoVolume": "kg",
-        "tipo": "não perecível",
-        "preco": 19.99
-    },
-    {
-        "id": 10,
-        "nome": "Nescau 1Kg ",
-        "tipoVolume": "kg",
-        "tipo": "não perecível",
-        "preco": 22.99
-    },
-    {
-        "id": 11,
-        "nome": "Batata 1Kg ",
-        "tipoVolume": "kg",
-        "tipo": "não perecível",
-        "preco": 12.99
-    },
-    {
-        "id": 12,
-        "nome": "Frango 1Kg ",
-        "tipoVolume": "kg",
-        "tipo": "perecível",
-        "preco": 36.99
     }
 ]
