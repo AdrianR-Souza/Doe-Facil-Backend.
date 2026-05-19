@@ -3,7 +3,6 @@
         "id": 1,
         "nome": "Bolacha Negresco",
         "tipoVolume": "Kg",
-        "valor": "10.99",
         "tipo": "perecivel",
         "peso": "5",
         "preco": 1.99
@@ -12,7 +11,7 @@
         "id": 2,
         "nome": "Chocolate Quente 1l",
         "tipoVolume": "L",
-        "valor": "14,99",
+        "preco": 14.99,
         "tipo": "perecivel",
         "peso": "2"
     },
@@ -20,15 +19,15 @@
         "id": 3,
         "nome": "Leite 1l",
         "tipoVolume": "L",
-        "valor": "5,99",
+        "preco": 5.99,
         "tipo": "perecivel",
         "peso": "1"
     },
     {
         "id": 4,
-        "nome": "Caf\u00e9 ",
-        "tipoVolume": "L",
-        "valor": "5,99",
+        "nome": "Café 500g" ,
+        "tipoVolume": "g",
+        "preco": 5.99,
         "tipo": "perecivel",
         "peso": "1"
     },

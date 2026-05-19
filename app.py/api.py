@@ -1,11 +1,15 @@
 #pasta certa: cd "c:\Users\brack\OneDrive - Grupo Marista\Faculdade\PUC 2026\RACIOCINIO LÓGICO\Doe + Fácil\app.py"                                                                                                                        
 #depois: python api.py
 
+from flask_cors import CORS  # no topo com os outros imports
 import json
 from flask import Flask, request, jsonify
-
+import threading
+pedido_lock = threading.Lock()
 
 app = Flask(__name__)
+CORS(app)  # logo depois do app = Flask(__name__)
+
 
 #função para carregar 
 def load_function (path_file):
@@ -281,8 +285,8 @@ def add_doador():
     if not isinstance(novo.get('nome'), str):
         return jsonify({"error" : "O retorno (nome) não é do tipo dados necessário."}), 422
     
-    tip_doador = ['cpf', 'cnpj']
-    if novo.get('tipo_doador') not in tip_doador:
+    tipo_doador = ['cpf', 'cnpj']
+    if novo.get('tipo_doador') not in tipo_doador:
         return jsonify({"error": "O tipo do cliente não foi encontrado (CPF , CNPJ)"}), 422
     if not isinstance(novo.get('tipo_doador'), str):
         return jsonify({"error" : "O retorno (tipo_doador) não é do tipo dados necessário."}), 422
@@ -387,7 +391,7 @@ def cad_pedido():
         return jsonify(resultado), 200
     
     return jsonify(cadastro_pedido),200
-
+"""
 @app.post('/pedido')
 def add_pedido():
     
@@ -445,10 +449,63 @@ def add_pedido():
     if novo.get("id_metodo_pgto") not in ids_metodos:
         return jsonify({"error": "id_metodo_pgto não cadastrado."}), 404
     
+    pedido = load_function("cad_pedido.json")  
     ultimo_id = pedido[-1]["id"] if pedido else 0
     novo["id"] = ultimo_id + 1
     pedido.append(novo)
     save_function("cad_pedido.json", pedido)
+    return jsonify(novo), 201
+"""
+@app.post('/pedido')
+def add_pedido():
+    novo = request.get_json()
+
+    if not novo.get('id_doador'):
+        return jsonify({"error": "No pedido, falta o id_doador:"}), 400
+    if not isinstance(novo.get('id_doador'), int):
+        return jsonify({"error": "O retorno (id_doador) não é do tipo dados necessário."}), 422
+
+    if not novo.get('id_produtos') or not isinstance(novo.get('id_produtos'), list):
+        return jsonify({"error": "No pedido, falta a lista id_produtos:"}), 400
+
+    if not novo.get('id_instituicao'):
+        return jsonify({"error": "No pedido, falta o id_instituicao:"}), 400
+    if not isinstance(novo.get('id_instituicao'), int):
+        return jsonify({"error": "O retorno (id_instituicao) não é do tipo dados necessário."}), 422
+
+    if not novo.get('id_metodo_pgto'):
+        return jsonify({"error": "No pedido, falta o id_metodo_pgto:"}), 400
+    if not isinstance(novo.get('id_metodo_pgto'), int):
+        return jsonify({"error": "O retorno (id_metodo_pgto) não é do tipo dados necessário."}), 422
+
+    doadores    = load_function("cad_doador.json")
+    instituicoes = load_function("cad_inst.json")
+    produtos    = load_function("produtos.json")
+    metodos     = load_function("metodo_pgto.json")
+
+    ids_doadores     = [i["id"] for i in doadores]
+    ids_instituicoes = [i["id"] for i in instituicoes]
+    ids_produtos     = [i["id"] for i in produtos]
+    ids_metodos      = [i["id"] for i in metodos]
+
+    if novo.get("id_doador") not in ids_doadores:
+        return jsonify({"error": "id_doador não cadastrado."}), 404
+    if novo.get("id_instituicao") not in ids_instituicoes:
+        return jsonify({"error": "id_instituicao não cadastrado."}), 404
+    if novo.get("id_metodo_pgto") not in ids_metodos:
+        return jsonify({"error": "id_metodo_pgto não cadastrado."}), 404
+
+    for id_prod in novo.get("id_produtos"):
+        if id_prod not in ids_produtos:
+            return jsonify({"error": f"id_produto {id_prod} não cadastrado."}), 404
+
+    with pedido_lock:
+        pedido = load_function("cad_pedido.json")
+        ultimo_id = pedido[-1]["id"] if pedido else 0
+        novo["id"] = ultimo_id + 1
+        pedido.append(novo)
+        save_function("cad_pedido.json", pedido)
+
     return jsonify(novo), 201
 
 @app.put('/pedido/<int:id>')
@@ -499,5 +556,7 @@ def confirmar_pgto():
 app.run()
 
 #source "/Users/adrian/Library/CloudStorage/OneDrive-GrupoMarista/Faculdade/PUC 2026/RACIOCINIO LÓGICO/Doe + Fácil/venv/bin/activate"
-#para entrar na pasta do arquivo: cd "c:\Users\brack\OneDrive - Grupo Marista\Faculdade\PUC 2026\RACIOCINIO LÓGICO\Doe + Fácil\app.py"    
+
+#para entrar na pasta do arquivo: cd "c:\Users\brack\OneDrive - Grupo Marista\Faculdade\PUC 2026\RACIOCINIO LÓGICO\Doe + Fácil\app.py" 
+#   
 #para rodar o codigo após entrar na pasta: python api.py  

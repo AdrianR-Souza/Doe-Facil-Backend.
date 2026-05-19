@@ -43,5 +43,14 @@
         "endereco": "Av Leonor, 1720",
         "contato": "(44) 99848-0624",
         "email": "cidoautoeletricaterraroxapr@gmail.com"
+    },
+    {
+        "razao_social": "PUCPR Toledo",
+        "nome_fantasia": "PUC",
+        "cnpj": 11111111000111,
+        "contato": "3430001111",
+        "endereco": "av guarani",
+        "email": "puc@gmail.com",
+        "id": 6
     }
 ]
