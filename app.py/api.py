@@ -1,30 +1,21 @@
-#pasta certa: cd "c:\Users\brack\OneDrive - Grupo Marista\Faculdade\PUC 2026\RACIOCINIO LÓGICO\Doe + Fácil\app.py"                                                                                                                        
-#depois: python api.py
-
-from flask_cors import CORS  # no topo com os outros imports
+from flask_cors import CORS  
 import json
 from flask import Flask, request, jsonify
 import threading
 pedido_lock = threading.Lock()
 
 app = Flask(__name__)
-CORS(app)  # logo depois do app = Flask(__name__)
+CORS(app)  
 
 
-#função para carregar 
 def load_function (path_file):
     with open(path_file, "r", encoding="utf-8") as arquivo:
         return json.load(arquivo)
-    
     
 def save_function(path_file, save):
     with open (path_file,'w', encoding="utf-8") as f:
         json.dump(save, f, indent=4)
 
-        
-#                     produtos
-
-#procurar produtos por id
 @app.get('/produto/<int:id>')
 def pedar_id_produto(id):
     save = load_function("produtos.json")
@@ -55,7 +46,6 @@ def listar_produtos():
         produtos = resultado
     return jsonify(produtos), 200
  
- # metodo POST 
 @app.post('/produto')
 def add_produto():
     produtos = load_function("produtos.json")
@@ -72,7 +62,6 @@ def add_produto():
         return jsonify({"mensagem" : "O tipo de volume informado não é valido"}), 422
     if not isinstance(novo.get('tipoVolume'), str):
         return jsonify({"error": "O retorno (tipoVolume) não é o tipo de dados necessário."}), 422
-    #estava implementando os isistance
     
     tipo_produto = ['perecível', 'não perecível']
     if novo.get('tipo') not in tipo_produto:
@@ -92,7 +81,6 @@ def add_produto():
     
     return jsonify(novo), 201
  
- #metodo PUT
 @app.put('/produto/<int:id>')
 def atualizar_produto(id):
       produtos = load_function("produtos.json")
@@ -105,10 +93,8 @@ def atualizar_produto(id):
                 save_function("produtos.json", produtos)
                 return jsonify({"mensagem" : "O atualizar produtos foi feito com sucesso."}), 200
            
-        
       return jsonify({"erro" : "Produto não encontrado."}), 404
                 
-#metodo delete
 @app.delete('/produto/<int:id>')
 def deletar(id):
     produtos = load_function("produtos.json")
@@ -126,9 +112,6 @@ def deletar(id):
            
     return jsonify({"error": "produto não encontrado."}), 404
         
-        
-#                     instituições
-#rota cadastro de instituições que irão receber as doações diretamente
 
 @app.get('/instituicoes/<int:id>')
 def pegar_id_instituicoes(id):
@@ -164,7 +147,6 @@ def cad_instituicao():
     
     return jsonify(cadastro_inst),200
 
-#post instituições
 @app.post('/instituicoes')
 def add_instituicoes():
     instituicoes = load_function("cad_inst.json")
@@ -242,8 +224,6 @@ def delete_instituicoes(id):
        
     return jsonify({"error": "Instituição não encontrada."}), 404   
 
-#DOADOR
-
 @app.get('/doador/<int:id>')
 def pegar_id_doador(id):
     save = load_function("cad_doador.json")
@@ -274,7 +254,6 @@ def cad_doador():
         return jsonify(resultado), 200
     return jsonify(cadastro_doador), 200
 
-#post do doador
 @app.post('/doador')
 def add_doador():
     doador = load_function("cad_doador.json")
@@ -359,7 +338,6 @@ def delete_doador(id):
         return jsonify({"error": "Doador não encontrado."}), 404
         
 
-#Rota /pedido
 @app.get('/pedido/<int:id>')
 def pegar_id_pedido(id):
     save = load_function("cad_pedido.json")
@@ -369,7 +347,6 @@ def pegar_id_pedido(id):
             return jsonify(i), 200
         
     return jsonify({"error" : "Id não encontrado na rota determinada."}), 404 
-
 
 @app.get('/pedido')
 def cad_pedido():
@@ -391,71 +368,7 @@ def cad_pedido():
         return jsonify(resultado), 200
     
     return jsonify(cadastro_pedido),200
-"""
-@app.post('/pedido')
-def add_pedido():
-    
-    pedido = load_function("cad_pedido.json")
-    novo = request.get_json()
-   
-    if not novo.get('id_doador'):
-        return jsonify({"error": "No pedido, falta o id_doador:"}), 400
-    if not isinstance(novo.get('id_doador'), int):
-        return jsonify({"error" : "O retorno (id_doador) não é do tipo dados necessário."}), 422
-    
-    if not novo.get('id_produto'):
-        return jsonify({"error": "No pedido, falta o id_produto:"}), 400
-    if not isinstance(novo.get('id_produto'), int):
-        return jsonify({"error" : "O retorno (id_produto) não é do tipo dados necessário."}), 422
-    
-    if not novo.get('id_instituicao'):
-        return jsonify({"error": "No pedido, falta o id_instituicao:"}), 400
-    if not isinstance(novo.get('id_instituicao'), int):
-        return jsonify({"error" : "O retorno (id_instituicao) não é do tipo dados necessário."}), 422
-    
-    if not novo.get('id_metodo_pgto'):
-        return jsonify({"error": "No pedido, falta o iid_metodo_pgto:"}), 400
-    if not isinstance(novo.get('id_metodo_pgto'), int):
-        return jsonify({"error" : "O retorno (id_metodo_pgto) não é do tipo dados necessário."}), 422
-    
-#validação apra ver se os ids para o pedido já foram cadastrados anteriormente
-    doadores = load_function("cad_doador.json")
-    instituicoes = load_function("cad_inst.json")
-    produtos = load_function("produtos.json")
-    metodos = load_function("metodo_pgto.json")
 
-    ids_doadores = []
-    for i in doadores:
-        ids_doadores.append(i["id"])
-
-    ids_instituicoes = []
-    for i in instituicoes:
-        ids_instituicoes.append(i["id"])
-
-    ids_produtos = []
-    for i in produtos:
-        ids_produtos.append(i["id"])
-
-    ids_metodos = []
-    for i in metodos:
-        ids_metodos.append(i["id"])
-
-    if novo.get("id_doador") not in ids_doadores:
-        return jsonify({"error": "id_doador não cadastrado."}), 404
-    if novo.get("id_instituicao") not in ids_instituicoes:
-        return jsonify({"error": "id_instituicao não cadastrado."}), 404
-    if novo.get("id_produto") not in ids_produtos:
-        return jsonify({"error": "id_produto não cadastrado."}), 404
-    if novo.get("id_metodo_pgto") not in ids_metodos:
-        return jsonify({"error": "id_metodo_pgto não cadastrado."}), 404
-    
-    pedido = load_function("cad_pedido.json")  
-    ultimo_id = pedido[-1]["id"] if pedido else 0
-    novo["id"] = ultimo_id + 1
-    pedido.append(novo)
-    save_function("cad_pedido.json", pedido)
-    return jsonify(novo), 201
-"""
 @app.post('/pedido')
 def add_pedido():
     novo = request.get_json()
@@ -522,8 +435,6 @@ def atualizar_pedido(id):
             
     return jsonify({"error": "Pedido não encontrado."}), 404
     
-#                         metodo pag
-
 @app.get('/metodo_pgto')
 def metodo_pgto():
     metodos = load_function("metodo_pgto.json")
@@ -554,9 +465,4 @@ def confirmar_pgto():
         
   
 app.run()
-
-#source "/Users/adrian/Library/CloudStorage/OneDrive-GrupoMarista/Faculdade/PUC 2026/RACIOCINIO LÓGICO/Doe + Fácil/venv/bin/activate"
-
-#para entrar na pasta do arquivo: cd "c:\Users\brack\OneDrive - Grupo Marista\Faculdade\PUC 2026\RACIOCINIO LÓGICO\Doe + Fácil\app.py" 
-#   
-#para rodar o codigo após entrar na pasta: python api.py  
+ 
