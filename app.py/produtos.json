@@ -25,7 +25,7 @@
     },
     {
         "id": 4,
-        "nome": "Café 500g" ,
+        "nome": "Caf\u00e9 500g",
         "tipoVolume": "g",
         "preco": 5.99,
         "tipo": "perecivel",
@@ -37,5 +37,53 @@
         "tipoVolume": "pcto",
         "tipo": "perecivel",
         "preco": 1.99
+    },
+    {
+        "nome": "Toddy 500ml",
+        "tipo": "n\u00e3o perec\u00edvel",
+        "tipoVolume": "ml",
+        "preco": 12.5,
+        "peso": "1",
+        "id": 6
+    },
+    {
+        "nome": "Arroz integral",
+        "tipo": "n\u00e3o perec\u00edvel",
+        "tipoVolume": "kg",
+        "preco": 24.9,
+        "peso": "5",
+        "id": 7
+    },
+    {
+        "nome": "feij\u00e3o preto",
+        "tipo": "n\u00e3o perec\u00edvel",
+        "tipoVolume": "kg",
+        "preco": 8.5,
+        "peso": "1",
+        "id": 8
+    },
+    {
+        "nome": "Leite Integral",
+        "tipo": "n\u00e3o perec\u00edvel",
+        "tipoVolume": "l",
+        "preco": 6.99,
+        "peso": "1",
+        "id": 9
+    },
+    {
+        "nome": "Macarr\u00e3o Espaguete",
+        "tipo": "n\u00e3o perec\u00edvel",
+        "tipoVolume": "g",
+        "preco": 4.75,
+        "peso": "500",
+        "id": 10
+    },
+    {
+        "nome": "\u00d3leo de Soja",
+        "tipo": "n\u00e3o perec\u00edvel",
+        "tipoVolume": "ml",
+        "preco": 7.8,
+        "peso": "900",
+        "id": 11
     }
 ]

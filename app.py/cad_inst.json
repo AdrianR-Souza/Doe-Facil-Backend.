@@ -1,56 +1,56 @@
 [
     {
-        "id": 1,
-        "razao_social": "Aparecido Martins de Souza",
-        "nome_fantasia": "Auto Eletrica Terra Roxa",
-        "cnpj": 19804918000111,
-        "endereco": "Av Castelo Branco, 1949",
-        "contato": "(44) 99848-0624",
-        "email": "cidoautoeletricaterraroxapr@hotmail.com"
-    },
-    {
         "id": 2,
-        "razao_social": "Aparecido Martins de Souza",
-        "nome_fantasia": "Auto Eletrica Terra Roxa",
-        "cnpj": 19804918000111,
-        "endereco": "Av Castelo Branco, 1949",
-        "contato": "(44) 99848-0624",
-        "email": "cidoautoeletricaterraroxapr@hotmail.com"
+        "razao_social": "Obra Social Nossa Senhora da Gl\u00f3ria - Fazenda da Esperan\u00e7a",
+        "nome_fantasia": "Fazenda Cristo Rei",
+        "cnpj": 48555775002870,
+        "endereco": "Rodovia Toledo - Ouro Verde, s/n, km 10, Linha S\u00e3o Francisco, Toledo - PR, CEP 85900-970",
+        "contato": "(45) 99136-0148",
+        "email": "toledo.m@fazenda.org.br"
     },
     {
         "id": 3,
-        "razao_social": "Aparecido Martins de Souza",
-        "nome_fantasia": "Auto Eletrica",
-        "cnpj": 19804918000111,
-        "endereco": "Av Castelo Branco, 1949",
-        "contato": "(44) 99848-0624",
-        "email": "cidoautoeletricaterraroxapr@hotmail.com"
+        "razao_social": "Associa\u00e7\u00e3o Embaixada Solid\u00e1ria",
+        "nome_fantasia": "Embaixada Solid\u00e1ria Toledo",
+        "cnpj": 39951531000103,
+        "endereco": "Rodovia Toledo - Ouro Verde, s/n, km 10, Linha S\u00e3o Francisco, Toledo - PR, CEP 85900-970",
+        "contato": "(45) 99136-0148 ",
+        "email": "toledo.m@fazenda.org.br"
     },
     {
         "id": 4,
-        "razao_social": "Henrique Mati",
+        "razao_social": "Igreja do Evangelho Quadrangular",
         "nome_fantasia": "Igreja Quadrandular",
         "cnpj": 19804918000111,
         "endereco": "Av Leonor, 1720",
         "contato": "(44) 99848-0624",
-        "email": "cidoautoeletricaterraroxapr@gmail.com"
+        "email": "ieqtrx@gmail.com"
     },
     {
         "id": 5,
-        "razao_social": "Duda Mati",
-        "nome_fantasia": "Igreja Quadrandular",
+        "razao_social": "Igreja Assembleia de Deus",
+        "nome_fantasia": "UMADEB",
         "cnpj": 19804918000111,
         "endereco": "Av Leonor, 1720",
         "contato": "(44) 99848-0624",
-        "email": "cidoautoeletricaterraroxapr@gmail.com"
+        "email": "igrejaassembleia@gmail.com"
     },
     {
-        "razao_social": "PUCPR Toledo",
+        "razao_social": "PUCPR Donations Toledo",
         "nome_fantasia": "PUC",
         "cnpj": 11111111000111,
         "contato": "3430001111",
         "endereco": "av guarani",
-        "email": "puc@gmail.com",
+        "email": "pucdonations@gmail.com",
         "id": 6
+    },
+    {
+        "razao_social": "Munic\u00edpio de Toledo (Prefeitura Municipal de Toledo)",
+        "nome_fantasia": "Banco de Alimentos Municipal de Toledo",
+        "cnpj": 76205806000188,
+        "contato": "(45) 3055-8800",
+        "endereco": "ardim S\u00e3o Francisco, ao lado do Restaurante Popular do bairro, Toledo - PR",
+        "email": "prefeituratoledo@gmail.com",
+        "id": 7
     }
 ]

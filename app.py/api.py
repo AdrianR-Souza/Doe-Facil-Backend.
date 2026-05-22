@@ -102,7 +102,7 @@ def deletar(id):
     
     for produto in validar_produto:
         if id == produto["id_produto"]:
-            return jsonify({"error": "O produto selecionado não pode ser deletado."}), 422
+            return jsonify({"error": "O produto selecionado não pode ser deletado, pois está vinculado a uma doação."}), 422
     
     for produto in produtos:
         if id == produto["id"]:
@@ -463,6 +463,5 @@ def confirmar_pgto():
     elif id_escolhido == 3:
         return jsonify({"mensagem": f"Pagamento via {metodos_pgto_validos[2][1]} confirmado!"}), 200
         
-  
 app.run()
  
