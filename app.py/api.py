@@ -15,6 +15,7 @@ def load_function (path_file):
 def save_function(path_file, save):
     with open (path_file,'w', encoding="utf-8") as f:
         json.dump(save, f, indent=4)
+        
 
 @app.get('/produto/<int:id>')
 def pedar_id_produto(id):
