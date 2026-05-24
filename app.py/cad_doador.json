@@ -21,23 +21,13 @@
     },
     {
         "id": 3,
-        "nome": "Adrian Mati",
+        "nome": "Adrian Ricardo de Souza",
         "tipo_doador": "cpf",
         "endereco": "Rua Luiz Sergio Fedrigo, 71",
         "cidade": "Terra Roxa",
         "cep": "85.990-000",
         "telefone": "(44) 99943-0541",
         "email": "duda@icloud.com"
-    },
-    {
-        "nome": "Adrian Ricardo de Souza",
-        "tipo_doador": "cpf",
-        "telefone": "44999430542",
-        "endereco": "rua luiz sergio fedrigo 71",
-        "cidade": "terra roxa",
-        "cep": "85880000",
-        "email": "brackmansouza@gmail.com",
-        "id": 4
     },
     {
         "nome": "Mateus Bokorni",
